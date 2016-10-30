@@ -1,0 +1,26 @@
+﻿@model Mediating.Sample.Features.UserManagement.GetAllUsersList.ViewModel
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@(user.Id.ToString().Substring(0, 14))...</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a href="/UserManagement/Create" class="btn btn-primary btn-lg">Create New</a>
+</div>

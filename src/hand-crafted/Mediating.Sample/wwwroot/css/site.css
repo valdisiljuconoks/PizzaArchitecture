@@ -1,0 +1,52 @@
+﻿body {
+    font-size: 28px;
+    padding-bottom: 20px;
+
+    padding-top: 50px;
+}
+
+/* Wrapping element */
+
+/* Set some basic padding to keep content from hitting the edges */
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* buttons and links extension to use brackets: [ click me ] */
+
+.btn-bracketed::before {
+    content: "[";
+    display: inline-block;
+    padding-right: 0.5em;
+}
+
+.btn-bracketed::after {
+    content: "]";
+    display: inline-block;
+    padding-left: 0.5em;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+
+.carousel-inner .item img[src$=".svg"] { width: 100%; }
+
+/* Hide/rearrange for smaller screens */
+
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption { display: none }
+}
+
+.form-control {
+    font-size: 28px;
+    height: 70px;
+}

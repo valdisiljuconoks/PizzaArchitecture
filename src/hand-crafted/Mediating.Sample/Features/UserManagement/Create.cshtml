@@ -1,0 +1,34 @@
+﻿@using Mediating.Sample.Features.UserManagement
+@model Mediating.Sample.Features.UserManagement.CreateUser.Command
+
+
+<div class="col-sm-6 col-sm-offset-3">
+    <h1>Create User</h1>
+    <form action="" method="post" class="ajax-form">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Username, new { @class = "control-label" })
+            @Html.EditorFor(m => m.Username, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.Username, null, new { @class = "help-block" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+            @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.Email, null, new { @class = "help-block" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })
+            @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.FirstName, null, new { @class = "help-block" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+            @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.LastName, null, new { @class = "help-block" })
+        </div>
+
+        <div>
+            <input type="submit" value="Create New User" class="btn btn-primary btn-lg"/>
+            <a href="/UserManagement/list" class="btn btn-lg">Back</a>
+        </div>
+    </form>
+</div>
