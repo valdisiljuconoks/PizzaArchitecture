@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Mediating.Sample.Features.UserManagement.Domain;
-using Mediating.Sample.Infrastructure.Queries;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement
 {
     public class GetAllUsersList
     {
-        public class Query : IQuery<ICollection<User>> { }
+        public class Query : IRequest<ICollection<User>> { }
 
-        public class Handler : IQueryHandler<Query, ICollection<User>>
+        public class Handler : IRequestHandler<Query, ICollection<User>>
         {
             private readonly IUserStorage _storage;
 
@@ -18,9 +20,9 @@ namespace Mediating.Sample.Features.UserManagement
                 _storage = storage;
             }
 
-            public ICollection<User> Handle(Query command)
+            public Task<ICollection<User>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return _storage.Users;
+                return Task.FromResult(_storage.Users);
             }
         }
 
@@ -28,13 +30,10 @@ namespace Mediating.Sample.Features.UserManagement
         {
             public ViewModel(ICollection<User> users)
             {
-                if(users == null)
-                    throw new ArgumentNullException(nameof(users));
-
-                Users = users;
+                Users = users ?? throw new ArgumentNullException(nameof(users));
             }
 
-            public ICollection<User> Users { get; private set; }
+            public ICollection<User> Users { get; }
         }
     }
 }

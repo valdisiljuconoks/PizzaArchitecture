@@ -1,55 +1,26 @@
 ﻿using System;
+using FluentValidation.AspNetCore;
 using Mediating.Sample.Infrastructure;
+using Mediating.Sample.Infrastructure.DependencyRegistries;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using StructureMap;
 
 namespace Mediating.Sample
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
-
-            if(env.IsDevelopment())
-                builder.AddUserSecrets();
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-            return UseStructureMapContainer(services);
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if(env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-                       {
-                           routes.MapRoute("default",
-                                           "{controller=Home}/{action=Index}/{id?}");
-                       });
-        }
-
-        private IServiceProvider UseStructureMapContainer(IServiceCollection services)
         {
             services.AddMvc()
                     .AddControllersAsServices()
@@ -58,8 +29,37 @@ namespace Mediating.Sample
                                      {
                                          opt.ViewLocationFormats.Add("~/Features/{1}/{0}.cshtml");
                                          opt.ViewLocationFormats.Add("~/Features/Shared/{0}.cshtml");
-                                     });
+                                     })
+                    .AddFluentValidation(_ => _.RegisterValidatorsFromAssemblyContaining<Startup>());
 
+            services.AddMediatR();
+
+            return UseStructureMapContainer(services);
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if(env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStaticFiles();
+
+            app.UseMvc(routes =>
+                       {
+                           routes.MapRoute("default",
+                                           "{controller=UserManagement}/{action=List}/{id?}");
+                       });
+        }
+
+        private IServiceProvider UseStructureMapContainer(IServiceCollection services)
+        {
             var container = new Container();
 
             container.Populate(services);
@@ -69,8 +69,10 @@ namespace Mediating.Sample
                                                 {
                                                     scanner.TheCallingAssembly();
                                                     scanner.WithDefaultConventions();
-                                                    scanner.LookForRegistries();
                                                 });
+
+                                    config.AddRegistry<MediatorRegistrations>();
+                                    config.AddRegistry<HttpRegistries>();
                                 });
 
             return container.GetInstance<IServiceProvider>();

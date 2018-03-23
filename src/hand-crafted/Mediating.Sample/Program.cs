@@ -1,5 +1,6 @@
-﻿using System.IO;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Mediating.Sample
 {
@@ -7,14 +8,16 @@ namespace Mediating.Sample
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
-
-            host.Run();
+            BuildWebHost(args).Run();
         }
+
+        private static IWebHost BuildWebHost(string[] args) => WebHost.CreateDefaultBuilder(args)
+                                                                      .ConfigureLogging((ctx, logging) =>
+                                                                                        {
+                                                                                            logging.AddConsole();
+                                                                                            logging.AddDebug();
+                                                                                        })
+                                                                      .UseStartup<Startup>()
+                                                                      .Build();
     }
 }

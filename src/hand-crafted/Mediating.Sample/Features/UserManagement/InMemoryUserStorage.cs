@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mediating.Sample.Features.UserManagement.Domain;
-using Mediating.Sample.Infrastructure.Mediator;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement
 {
@@ -13,10 +13,7 @@ namespace Mediating.Sample.Features.UserManagement
 
         public InMemoryUserStorage(IMediator mediator)
         {
-            if(mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-
-            _mediator = mediator;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
             // initial seed
             _users = new List<User>

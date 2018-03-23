@@ -13,8 +13,7 @@ namespace Mediating.Sample.Infrastructure.Validation
             if(filterContext.ModelState.IsValid)
                 return;
 
-            bool isAjaxForm;
-            bool.TryParse(filterContext.HttpContext.Request.Headers["X-Ajax-Form"], out isAjaxForm);
+            bool.TryParse(filterContext.HttpContext.Request.Headers["X-Ajax-Form"], out var isAjaxForm);
 
             filterContext.Result = isAjaxForm
                                        ? FormatJsonResponse(filterContext.ModelState)

@@ -1,9 +1,9 @@
 ﻿using System;
-using Mediating.Sample.Infrastructure.Events;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement
 {
-    public class UserCreatedEmailSent : IDomainEvent
+    public class UserCreatedEmailSent : INotification
     {
         public UserCreatedEmailSent(string username, string email, DateTime when)
         {
@@ -18,11 +18,11 @@ namespace Mediating.Sample.Features.UserManagement
             WhenSent = when;
         }
 
-        public string Username { get; private set; }
+        public string Username { get; }
 
-        public string Email { get; private set; }
+        public string Email { get; }
 
-        public DateTime WhenSent { get; private set; }
+        public DateTime WhenSent { get; }
 
         public DateTime OccuredAt { get; } = DateTime.UtcNow;
     }

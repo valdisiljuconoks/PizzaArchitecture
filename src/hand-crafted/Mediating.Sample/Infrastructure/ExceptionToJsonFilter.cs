@@ -12,9 +12,7 @@ namespace Mediating.Sample.Infrastructure
     {
         public void OnException(ExceptionContext context)
         {
-            var validationException = context.Exception as ValidationException;
-
-            if(validationException != null)
+            if(context.Exception is ValidationException validationException)
                 FormatValidationResponse(context, validationException);
             else
                 FormatErrorResponse(context);
@@ -40,8 +38,7 @@ namespace Mediating.Sample.Infrastructure
 
             var result = new ContentResult
                          {
-                             Content =
-                                 JsonConvert.SerializeObject(context.ModelState),
+                             Content = JsonConvert.SerializeObject(context.ModelState),
                              ContentType = "application/json"
                          };
 

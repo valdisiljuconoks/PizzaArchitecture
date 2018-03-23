@@ -9,8 +9,7 @@
         }
     };
     var showException = function(data) {
-        data = JSON.parse(data.responseJSON);
-        alert(data.Error);
+        alert(data.responseJSON.Error);
     };
     var highlightErrors = function(response) {
         var data = response.responseJSON;

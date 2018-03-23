@@ -1,5 +1,6 @@
-﻿using Mediating.Sample.Infrastructure.ControllerHelpers;
-using Mediating.Sample.Infrastructure.Mediator;
+﻿using System.Threading.Tasks;
+using Mediating.Sample.Infrastructure.ControllerHelpers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mediating.Sample.Features.UserManagement
@@ -13,9 +14,9 @@ namespace Mediating.Sample.Features.UserManagement
             _mediator = mediator;
         }
 
-        public ActionResult List(GetAllUsersList.Query query)
+        public async Task<ActionResult> List(GetAllUsersList.Query query)
         {
-            var result = _mediator.Query(query);
+            var result =await  _mediator.Send(query);
             var model = new GetAllUsersList.ViewModel(result);
 
             return View(model);
@@ -28,9 +29,9 @@ namespace Mediating.Sample.Features.UserManagement
         }
 
         [HttpPost]
-        public ActionResult Create(CreateUser.Command command)
+        public async Task<ActionResult> Create(CreateUser.Command command)
         {
-            _mediator.Execute(command);
+            await _mediator.Send(command);
 
             return this.RedirectToActionJson("List");
         }

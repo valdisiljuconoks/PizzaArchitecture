@@ -1,10 +1,11 @@
-﻿using Mediating.Sample.Features.UserManagement.Domain;
-using Mediating.Sample.Infrastructure.Events;
-using Mediating.Sample.Infrastructure.Mediator;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Mediating.Sample.Features.UserManagement.Domain;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement
 {
-    public class UserCreatedEventHandler : IDomainEventHandler<UserCreatedEvent>
+    public class UserCreatedEventHandler : INotificationHandler<UserCreatedEvent>
     {
         private readonly IMediator _mediator;
 
@@ -13,12 +14,9 @@ namespace Mediating.Sample.Features.UserManagement
             _mediator = mediator;
         }
 
-        public void Handle(UserCreatedEvent @event)
+        public async Task Handle(UserCreatedEvent @event, CancellationToken cancellationToken)
         {
-            // some smanczy/fancy business logic
-            // on how to spam users and become even more annoying..
-
-            _mediator.Publish(new UserCreatedEmailSent(@event.Username, @event.Email, @event.OccuredAt));
+            await _mediator.Publish(new UserCreatedEmailSent(@event.Username, @event.Email, @event.OccuredAt), cancellationToken);
         }
     }
 }

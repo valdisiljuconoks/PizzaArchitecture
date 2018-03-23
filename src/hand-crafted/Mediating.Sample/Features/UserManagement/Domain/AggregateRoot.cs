@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Mediating.Sample.Infrastructure.Events;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement.Domain
 {
     public class AggregateRoot
     {
-        public ICollection<IDomainEvent> Events { get; } = new List<IDomainEvent>();
+        public ICollection<INotification> Events { get; } = new List<INotification>();
     }
 }

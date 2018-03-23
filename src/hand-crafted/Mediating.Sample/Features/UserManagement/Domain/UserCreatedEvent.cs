@@ -1,9 +1,9 @@
 ﻿using System;
-using Mediating.Sample.Infrastructure.Events;
+using MediatR;
 
 namespace Mediating.Sample.Features.UserManagement.Domain
 {
-    public class UserCreatedEvent : IDomainEvent
+    public class UserCreatedEvent : INotification
     {
         public UserCreatedEvent(string username, string email)
         {
@@ -18,9 +18,9 @@ namespace Mediating.Sample.Features.UserManagement.Domain
             OccuredAt = DateTime.UtcNow;
         }
 
-        public string Username { get; private set; }
+        public string Username { get; }
 
-        public string Email { get; private set; }
+        public string Email { get; }
 
         public DateTime OccuredAt { get; }
     }
